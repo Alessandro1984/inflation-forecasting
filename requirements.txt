@@ -1,0 +1,9 @@
+# API
+fastapi
+pytz
+uvicorn
+# tests
+httpx
+pytest-asyncio
+
+#protobuf==3.20.*
