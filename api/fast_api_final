@@ -1,0 +1,34 @@
+
+
+
+###complete, once the models are unified###
+def select_model(country:str):
+    '''
+    Selects the model_name dependent from the users country input
+    '''
+    country_model_dict = {
+        "country_1" : "model_name_1",
+        "country_2" : "model_name_2",
+        "country_3" : "model_name_3",
+        "country_4" : "model_name_4",
+        "country_5" : "model_name_5",
+        "country_6" : "model_name_6",
+        "country_7" : "model_name_7",
+        }
+    for country in country_model_dict:
+        model_name = country_model_dict[country]
+        return model_name
+
+#get_forecast:
+#if model = model_name:
+    l#oad_model()
+    #return y_pred
+
+    #get_data(model_name)
+    #return df
+
+
+
+@app.get("/")
+def root():
+    return {'greeting': 'Hello'}

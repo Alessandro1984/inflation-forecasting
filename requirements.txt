@@ -2,8 +2,29 @@
 fastapi
 pytz
 uvicorn
+
+#data analysis
+pandas
+numpy
+
+#model
+DummyRegressor
+Model
+Sequential
+layers
+regularizers
+optimizers
+EarlyStopping
+train_test_split
+
+
 # tests
 httpx
 pytest-asyncio
+
+#google cloud
+storage
+
+
 
 #protobuf==3.20.*
