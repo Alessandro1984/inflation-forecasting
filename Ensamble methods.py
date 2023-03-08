@@ -2,8 +2,8 @@
 # coding: utf-8
 
 # # import packages
-#
-# In[6]:
+
+# In[9]:
 
 
 import pandas as pd
@@ -12,24 +12,34 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 
 
-# In[7]:
+# In[10]:
 
 
-# Check your current working directory using `os.getcwd()` below
+# Check your current working directory using `os.getcwd()` below 
 import os
 os.getcwd()
+
+
+# In[15]:
+
 
 #csv_path = os.path.join('..', 'data-context-and-setup', 'data', 'csv')
 csv_path = os.path.join('..','inflation-forecasting','raw_data')
 
 
+# In[16]:
+
+
+csv_path
+
+
 # # load and explore data
 
-# In[10]:
+# In[17]:
 
 
 #pd.read_csv(os.path.join(csv_path, 'olist_sellers_dataset.csv')).head()
-df = pd.read_csv(os.path.join(csv_path,'data.csv'))
+df = pd.read_csv(os.path.join(csv_path,'data_us.csv'))
 
 
 
@@ -49,44 +59,44 @@ df = df.rename(columns={
 df = df.drop("Unnamed: 0", axis=1)
 df = df.drop('CPI',axis=1)
 
-#set time to time
+#set time to time 
 df['Time'] = pd.to_datetime(df['Time'])
 df = df.set_index('Time')
 df
 
 
-# In[3]:
+# In[18]:
 
 
 df.head()
 
 
-# In[4]:
+# In[19]:
 
 
 df.info()
 
 
-# In[5]:
+# In[20]:
 
 
 #drop NaN
 df = df.dropna(how='any')
 
 
-# In[6]:
+# In[21]:
 
 
 df.isna().sum()
 
 
-# In[7]:
+# In[22]:
 
 
 df.describe()
 
 
-# In[8]:
+# In[23]:
 
 
 from pandas.plotting import scatter_matrix
@@ -95,7 +105,7 @@ scatter_matrix(df, alpha=1, figsize=(12, 8), diagonal='hist')
 plt.show()
 
 
-# In[9]:
+# In[24]:
 
 
 df.corr()
@@ -105,7 +115,7 @@ df.corr()
 
 # ## import relevant packages
 
-# In[10]:
+# In[25]:
 
 
 from sklearn.model_selection import train_test_split
@@ -114,7 +124,7 @@ from sklearn.metrics import mean_squared_error
 
 # ## create test-train split
 
-# In[11]:
+# In[26]:
 
 
 X = df.drop(columns='core_CPI')
@@ -130,13 +140,13 @@ X_val, X_test, y_val, y_test = train_test_split(
 X_train.shape, X_test.shape, y_train.shape, y_test.shape, y_val.shape, X_val.shape
 
 
-# In[12]:
+# In[27]:
 
 
 y_val
 
 
-# In[13]:
+# In[28]:
 
 
 y_test
@@ -146,7 +156,7 @@ y_test
 
 # let's create a basic model to use as a benchmark
 
-# In[14]:
+# In[29]:
 
 
 baseline_1 = mean_squared_error(y_train, X_train["fed_funds_rate"].values)
@@ -157,7 +167,7 @@ print(f"Our first baseline give a MSE of {baseline_1}")
 
 # ## importing relevant packages
 
-# In[15]:
+# In[30]:
 
 
 from sklearn.model_selection import GridSearchCV
@@ -174,7 +184,7 @@ import seaborn as sns
 
 # Random Forest is an ensemble learning method that constructs multiple decision trees and combines their outputs to make a final prediction. Each tree is trained on a randomly selected subset of the training data, and features are randomly sampled at each node to increase diversity and reduce overfitting.
 
-# In[16]:
+# In[31]:
 
 
 forest = RandomForestRegressor()
@@ -189,7 +199,7 @@ print(f"Our random forest give a MSE of {-(forest_mse)}")
 
 # It is an iterative ensemble learning method that assigns higher weights to misclassified samples and trains weak models sequentially to improve overall performance. The final model combines the weak learners by assigning weights to their predictions based on their performance.
 
-# In[17]:
+# In[32]:
 
 
 adaboost = AdaBoostRegressor(
@@ -205,7 +215,7 @@ print(f"Our random forest give a MSE of {-(ada_booster_mse)}")
 
 # It is another iterative ensemble learning method that trains weak models sequentially to minimize the loss function using gradient descent. It combines the predictions of multiple decision trees to produce a final prediction with higher accuracy than any individual tree.
 
-# In[18]:
+# In[33]:
 
 
 model = GradientBoostingRegressor()
@@ -216,11 +226,11 @@ print(f"Our random forest give a MSE of {-(gradient_booster_mse)}")
 
 
 # **EXTREME GRADIENT BOOSTER**
-#
+# 
 
 # It is a variation of gradient boosting that uses a more regularized approach to reduce overfitting and improve computational efficiency. It implements parallel processing and hardware optimization to improve speed and scalability.
 
-# In[19]:
+# In[34]:
 
 
 xgb_reg = XGBRegressor(max_depth=10, n_estimators=100, learning_rate=0.1)
@@ -235,7 +245,7 @@ print(f"Our random forest give a MSE of {-(x_booster_mse)}")
 
 # Given the gradient booster has the lowest MSE, this model is used to optimize performance
 
-# In[20]:
+# In[35]:
 
 
 # Fit the GradientBoostingRegressor to the training data
@@ -251,7 +261,7 @@ mse = mean_squared_error(y_val, y_pred)
 print(f"Mean squared error on validation set: {mse:.2f}")
 
 
-# In[21]:
+# In[36]:
 
 
 #plot the graph
@@ -266,7 +276,7 @@ plt.show()
 
 # ## optimize hyperparameters
 
-# In[22]:
+# In[37]:
 
 
 # Define the hyperparameter grid to search through
@@ -294,7 +304,7 @@ print("Best hyperparameters: ", grid_search.best_params_)
 print("Best mean squared error: ", -grid_search.best_score_)
 
 
-# In[33]:
+# In[38]:
 
 
 # Define the best hyperparameters from the grid search
@@ -324,7 +334,7 @@ mse = mean_squared_error(y_val, y_pred)
 print("Validation set mean squared error: ", mse)
 
 
-# In[34]:
+# In[39]:
 
 
 #plot the data
@@ -339,7 +349,7 @@ plt.show()
 
 # # predict test data
 
-# In[35]:
+# In[40]:
 
 
 # Make predictions on the validation set
@@ -350,7 +360,7 @@ mse = mean_squared_error(y_test, y_pred)
 print("Validation set mean squared error: ", mse)
 
 
-# In[36]:
+# In[41]:
 
 
 #plot the data
@@ -363,7 +373,7 @@ ax.set(xlabel='Time', ylabel='Inflation', title='Actual vs Predicted')
 plt.show()
 
 
-# In[37]:
+# In[42]:
 
 
 np.sqrt(mse)
@@ -371,14 +381,14 @@ np.sqrt(mse)
 
 # # check for overfitting
 
-# In[38]:
+# In[43]:
 
 
 summ = model.predict(X_train) - y_train
 summ.max()
 
 
-# In[39]:
+# In[44]:
 
 
 # Make predictions on the validation set
@@ -389,7 +399,7 @@ mse = mean_squared_error(y_train, y_pred)
 print("Validation set mean squared error: ", mse)
 
 
-# In[40]:
+# In[45]:
 
 
 # Plot the data
@@ -403,10 +413,42 @@ ax.set(xlabel='Time', ylabel='Inflation', title='Actual vs Predicted')
 plt.show()
 
 
+# # Train on all data
+
+# In[51]:
+
+
+# Fit the GradientBoostingRegressor to the training data
+model.fit(X, y)
+
+
+# In[52]:
+
+
+# Make predictions on the validation set
+y_pred = model.predict(X)
+
+# Evaluate the performance of the model using mean squared error
+mse = mean_squared_error(y, y_pred)
+print("All data mean squared error: ", mse)
+
+
+# In[53]:
+
+
+# Plot the data
+y_pred_df = pd.DataFrame(data=y_pred, index=y.index, columns=['Predicted'])
+combined_df = pd.concat([y, y_pred_df], axis=1)
+
+fig, ax = plt.subplots(figsize=(12, 6))
+sns.lineplot(data=combined_df, ax=ax, linestyle='-')
+ax.set(xlabel='Time', ylabel='Inflation', title='Actual vs Predicted')
+#ax.set_xlim(pd.Timestamp('1980-01-01'), pd.Timestamp('1981-12-31'))
+plt.show()
+
+
 # In[ ]:
 
 
 
 
-
-# In[ ]:
