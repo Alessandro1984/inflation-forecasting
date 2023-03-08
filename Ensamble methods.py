@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # # import packages
-
+#
 # In[6]:
 
 
@@ -15,7 +15,7 @@ import plotly.express as px
 # In[7]:
 
 
-# Check your current working directory using `os.getcwd()` below 
+# Check your current working directory using `os.getcwd()` below
 import os
 os.getcwd()
 
@@ -49,7 +49,7 @@ df = df.rename(columns={
 df = df.drop("Unnamed: 0", axis=1)
 df = df.drop('CPI',axis=1)
 
-#set time to time 
+#set time to time
 df['Time'] = pd.to_datetime(df['Time'])
 df = df.set_index('Time')
 df
@@ -216,7 +216,7 @@ print(f"Our random forest give a MSE of {-(gradient_booster_mse)}")
 
 
 # **EXTREME GRADIENT BOOSTER**
-# 
+#
 
 # It is a variation of gradient boosting that uses a more regularized approach to reduce overfitting and improve computational efficiency. It implements parallel processing and hardware optimization to improve speed and scalability.
 
@@ -410,7 +410,3 @@ plt.show()
 
 
 # In[ ]:
-
-
-
-
