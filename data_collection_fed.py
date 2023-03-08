@@ -20,7 +20,7 @@ from plotly.subplots import make_subplots
 
 with open("secrets_file.json", "r") as f:
     secrets = json.load(f)
-    
+
 api_key = secrets["api_key"]
 
 
@@ -28,16 +28,16 @@ api_key = secrets["api_key"]
 
 
 class FredPy:
-    
+
     def __init__(self, token=None):
         self.token = token
         self.url = "https://api.stlouisfed.org/fred/series/observations" + \
                    "?series_id={seriesID}&api_key={key}&file_type=json" + \
                    "&observation_start={start}&observation_end={end}&frequency={frequency}&units={units}"
-        
+
     def set_token(self, token):
         self.token = token
-        
+
     def get_series(self, seriesID, start, end, frequency, units):
         url_formatted = self.url.format(seriesID = seriesID,
                                         start = start,
@@ -45,15 +45,15 @@ class FredPy:
                                         frequency=frequency,
                                         units = units,
                                         key = self.token)
-        
+
         response = requests.get(url_formatted)
-        
+
         if (self.token):
             if (response.status_code == 200):
                 df = pd.DataFrame(response.json()['observations'])[['date', 'value']]\
                                 .assign(date = lambda cols: pd.to_datetime(cols["date"]))\
                                 .assign(value = lambda cols: cols["value"].astype(float))\
-                                .rename(columns = {"value": seriesID, 
+                                .rename(columns = {"value": seriesID,
                                                    "date": "Time"})
                 return df
             else:
@@ -205,55 +205,55 @@ fig = make_subplots(
     subplot_titles=("Fed funds rate", "CPI", "Core CPI", "Unemmployment",
                    "Oil price", "Index industrial production", "Money supply", "Wage growth"))
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["DFF"],
                          name = "DFF"),
               row=1, col=1)
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["CPIAUCSL"],
                          name = "CPIAUCSL"),
               row=1, col=2)
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["CPILFESL"],
                          name = "CPILFESL"),
               row=1, col=3)
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["UNRATE"],
                          name = "UNRATE"),
               row=1, col=4)
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["WTISPLC"],
                          name = "WTISPLC"),
               row=2, col=1)
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["INDPRO"],
                          name = "INDPRO"),
               row=2, col=2)
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["MABMM301USM189S"],
                          name = "MABMM301USM189S"),
               row=2, col=3)
 
-fig.add_trace(go.Scatter(x = df_merged["Time"], 
+fig.add_trace(go.Scatter(x = df_merged["Time"],
                          y = df_merged["A576RC1"],
                          name = "A576RC1"),
               row=2, col=4)
 
 fig.update_layout(
-    title = "Variables", 
+    title = "Variables",
     autosize=False,
     width=890,
     height=600,
   legend = dict(
         xanchor = "center",
         yanchor = "top",
-        y = -0.2, 
+        y = -0.2,
         x = 0.5,
         orientation = 'h'
   )
@@ -274,7 +274,7 @@ fig.show(config=config)
 #     subplot_titles=("Plot 1", "Plot 2"))
 
 # for column in X:
-#         fig.add_trace(go.Scatter(x = df_merged["Time"], 
+#         fig.add_trace(go.Scatter(x = df_merged["Time"],
 #                              y = X[column]))
 
 # fig.show()
@@ -284,4 +284,3 @@ fig.show(config=config)
 
 
 #df_merged.to_csv(os.path.join('data','data.csv'))
-
