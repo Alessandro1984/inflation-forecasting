@@ -3,7 +3,7 @@
 
 # # import packages
 
-# In[1]:
+# In[6]:
 
 
 import pandas as pd
@@ -12,13 +12,25 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 
 
+# In[7]:
+
+
+# Check your current working directory using `os.getcwd()` below 
+import os
+os.getcwd()
+
+#csv_path = os.path.join('..', 'data-context-and-setup', 'data', 'csv')
+csv_path = os.path.join('..','inflation-forecasting','raw_data')
+
+
 # # load and explore data
 
-# In[2]:
+# In[10]:
 
 
-path = '/Users/joeplamers/code/Alessandro1984/inflation-forecasting/raw_data/data.csv'
-df = pd.read_csv(path)
+#pd.read_csv(os.path.join(csv_path, 'olist_sellers_dataset.csv')).head()
+df = pd.read_csv(os.path.join(csv_path,'data.csv'))
+
 
 
 # rename columns
