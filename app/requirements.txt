@@ -3,4 +3,3 @@ plotly
 requests
 numpy
 pandas
-os
