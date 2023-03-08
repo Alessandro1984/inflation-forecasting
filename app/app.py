@@ -8,11 +8,11 @@ st.markdown("""# Inflation predictor
 ## working title""")
 #
 #the relative path to the data
-#csv_path = os.path.join('..','inflation-forecasting','raw_data')
-#df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
+csv_path = os.path.join('..','inflation-forecasting','raw_data')
+df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
 
 #temporarily use local path, relative path wasn't working (comment by Joep)
-df = pd.read_csv('/Users/joeplamers/code/Alessandro1984/inflation-forecasting/raw_data/data_final.csv')
+#df = pd.read_csv('/Users/joeplamers/code/Alessandro1984/inflation-forecasting/raw_data/data_final.csv')
 
 # this slider allows the user to select a number of lines
 # to display in the dataframe
