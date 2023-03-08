@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+#
 # In[3]:
 
 
@@ -31,20 +31,20 @@ endpoints = [
     ]
 
 def obtain_data(country):
-    
+
     suffix_country = f'{country}?format=JSON&lang=en'
     full_endpoints = [base_uri + endpoints[i] + suffix_country for i in range(len(endpoints)-1)]
     xtra_endpoint = base_uri + endpoints[-1] + '?format=JSON&lang=en'
     full_endpoints.append(xtra_endpoint)
-    
+
     dfs = {}
-    
+
     for idx, url in enumerate(full_endpoints):
-        
+
         response = requests.get(url)
-        
+
         assert response.status_code == 200, "Bad request"
-        
+
         years = response.json()['dimension']['time']['category']['label']
         value = response.json()['value']
         df1 = pd.DataFrame.from_dict(years, orient='index', columns=['Year']).reset_index()[['Year']]
@@ -56,7 +56,7 @@ def obtain_data(country):
         df = df_merged[['Year', 'Value']]
 
         dfs[idx] = df
-        
+
     df_cpi = dfs[0]
     df_cpi = df_cpi.rename(columns={"Value": "cpi"})
     df_ccpi = dfs[1]
@@ -67,11 +67,11 @@ def obtain_data(country):
     df_unemp = df_unemp.rename(columns={"Value": "unemp"})
     df_intrate = dfs[4]
     df_intrate = df_intrate.rename(columns={"Value": "intrate"})
-    
+
     df_additional = pd.read_csv("raw_data/data_additional.csv", sep = ";")
 
     df_merged = df_cpi.merge(df_ccpi, how='left').merge(df_indprod, how='left').merge(df_unemp, how='left').merge(df_intrate, how='left').merge(df_additional, how='left')
-    
+
     country_id  = []
 
     for x in range(df_merged.shape[0]):
@@ -80,7 +80,7 @@ def obtain_data(country):
     df_country_id = pd.DataFrame(country_id, columns=['country_id'])
 
     df_final = df_merged.join(pd.DataFrame(df_country_id))
-    
+
     return df_final
 
 
@@ -108,4 +108,3 @@ df_all_new
 
 
 df_all_new.to_csv("raw_data/data_euro.csv", index = False)
-
