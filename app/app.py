@@ -8,7 +8,7 @@ st.markdown("""# Inflation predictor
 ## working title""")
 #
 #the relative path to the data
-csv_path = os.path.join('..','inflation-forecasting','raw_data')
+csv_path = os.path.join('..','raw_data')
 df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
 
 #temporarily use local path, relative path wasn't working (comment by Joep)
