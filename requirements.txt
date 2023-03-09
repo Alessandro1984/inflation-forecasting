@@ -3,20 +3,27 @@ fastapi
 pytz
 uvicorn
 
+#data processing
+os
+time
+glob
+
 #data analysis
 pandas
 numpy
+plotly.express
+#seaborn
+#matplotlib.pyplot
 
 #model
-DummyRegressor
+mean_squared_error
 Model
 Sequential
 layers
 regularizers
 optimizers
 EarlyStopping
-train_test_split
-
+GradientBoostingRegressor
 
 # tests
 httpx
