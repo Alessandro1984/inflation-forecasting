@@ -3,13 +3,17 @@ import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 import os
+import requests
+
+urlAPI = "http://127.0.0.1:8000/predict"
 
 st.markdown("""# Inflation predictor
 ## working title""")
 #
 #the relative path to the data
 csv_path = os.path.join('..','inflation-forecasting','raw_data')
-df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
+file_path = os.path.join(csv_path,'data_final.csv')
+df = pd.read_csv(file_path)
 
 #temporarily use local path, relative path wasn't working (comment by Joep)
 #df = pd.read_csv('/Users/joeplamers/code/Alessandro1984/inflation-forecasting/raw_data/data_final.csv')
@@ -21,7 +25,9 @@ country_list = df['country'].unique()
 with st.sidebar:
     country = st.selectbox('Please select the country you would like to see', country_list)
 
-st.write('You selected:', country)
+#st.write('You selected:', country)
+
+
 
 df_country = df[df['country'] == country]
 
@@ -46,3 +52,9 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig,use_container_width=True)
+
+if st.button("Predict"):
+    st.spinner("Waiting for prediction")
+    response = requests.post(urlAPI, files = {"csv_file": file_path})
+    result = response.json()["Status"]
+    st.write(result)
