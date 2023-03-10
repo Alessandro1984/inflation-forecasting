@@ -1,3 +1,3 @@
-requirements.txt
-model.py
-fast_api_final.py
+minimal_requirements.txt
+model_pseudocode.py
+fast_api.py
