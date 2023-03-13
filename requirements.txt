@@ -1,0 +1,38 @@
+# API
+fastapi
+pytz
+uvicorn
+python-multipart
+
+#data processing
+os
+time
+glob
+
+#data analysis
+pandas
+numpy
+plotly.express
+#seaborn
+#matplotlib.pyplot
+
+#model
+mean_squared_error
+Model
+Sequential
+layers
+regularizers
+optimizers
+EarlyStopping
+GradientBoostingRegressor
+
+# tests
+httpx
+pytest-asyncio
+
+#google cloud
+storage
+
+
+
+#protobuf==3.20.*

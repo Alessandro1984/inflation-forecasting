@@ -1,0 +1,59 @@
+import pandas as pd
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from sklearn.model_selection import train_test_split
+from model.py import load_y_pred, get_data
+
+
+app = FastAPI()
+
+# Optional, good practice for dev purposes. Allow all middlewares
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
+#def select_model(country):
+    #'''
+    #Selects the model_name dependent from the users country input
+    #'''
+    #country_data_dict = {
+    ##"Italy" : "data_IT",
+   # "Germany" : "data_D",
+    #"The Netherlands" : "data_NL",
+    #"Spain" : "data_ES",
+   # "France" : "data_F",
+   # "United States of America" : "data_US"
+   # }
+   # for country in country_data_dict:
+       # data_name = country_data_dict[country]
+   # return data_name
+
+def get_predicted_inflation(country):
+    load_y_pred(country)
+    predicted_inflation = list(y_pred)
+    return predicted_inflation
+
+def get_actual_inflation(country):
+    get_data(country)
+    actual_inflation = list(y)
+    return actual_inflation
+
+@app.get("/predict")
+def predict(country):
+    #select_model(country)
+    get_predicted_inflation(country)
+    get_actual_inflation(country)
+
+    return { "predicted inflation" : "predicted_inflation",
+            "actual inflation" : "actual_inflation"}
+
+@app.get("/")
+def root():
+    return {'greeting': 'Hello'}
+
+
+# http://127.0.0.1:8000/predict?country={country}
