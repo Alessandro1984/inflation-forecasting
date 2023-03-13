@@ -2,6 +2,7 @@
 fastapi
 pytz
 uvicorn
+python-multipart
 
 #data processing
 os
