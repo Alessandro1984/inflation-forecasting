@@ -8,11 +8,8 @@ st.markdown("""# Inflation predictor
 ## working title""")
 #
 #the relative path to the data
-csv_path = os.path.join('..','inflation-forecasting','raw_data')
+csv_path = os.path.join('..','raw_data')
 df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
-
-#temporarily use local path, relative path wasn't working (comment by Joep)
-#df = pd.read_csv('/Users/joeplamers/code/Alessandro1984/inflation-forecasting/raw_data/data_final.csv')
 
 # this slider allows the user to select a number of lines
 # to display in the dataframe
@@ -20,6 +17,8 @@ df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
 country_list = df['country'].unique()
 with st.sidebar:
     country = st.selectbox('Please select the country you would like to see', country_list)
+    inflation_type = st.radio("Select Inflation Type", ('Headline Inflation', 'Core Inflation'))
+
 
 st.write('You selected:', country)
 
