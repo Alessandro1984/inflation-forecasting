@@ -1,1 +1,3 @@
-
+*.yaml
+.env
+.python-version
