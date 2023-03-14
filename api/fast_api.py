@@ -1,13 +1,35 @@
 import pandas as pd
+import requests
+import numpy as np
 from io import StringIO
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sklearn.model_selection import train_test_split
 from sklearn.dummy import DummyRegressor
+from fastapi.encoders import jsonable_encoder
+import json
+
+from pydantic import BaseModel
+
+from ml_logic.preprocessor import scaling, preprocess, filter
+from ml_logic.registry import load_models
+from ml_logic.predictions import future_forecasting
 
 # To-Do: check if here more functions need to be added from our code,which we have to import (e.g. anything with modeling etc.)
 
+class FilteringData(BaseModel):
+    country: str
+    inflation_type: str
+    num_months: int
+
 app = FastAPI()
+
+@app.post("/model")
+def load_model(filteringData: FilteringData):
+    app.state.model = load_models(
+        model_country=filteringData.country,
+        case=filteringData.inflation_type)
+    return app.state.model
 #app.state.model = #To-Do: load models --> discuss: does this make sense if we have several models?
 
 # Optional, good practice for dev purposes. Allow all middlewares
@@ -19,18 +41,93 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-@app.post("/predict")
-def upload_file(csv_file: UploadFile = File(...)):
-    contents = csv_file.file.read()
-    buffer = StringIO(contents.decode('utf-8'))
-    df = pd.read_csv(buffer)
-    print(df.info())
-
-    #process df
-    return {"Status": "ok"} #df.to_dict()
+# @app.post("/item")
+# def load_model(filteringData: FilteringData):
+#     model = load_models(
+#         model_country=filteringData.country,
+#         case=filteringData.inflation_type)
+#     return filteringData
 
 # http://127.0.0.1:8000/predict?country={country}
-# @app.get("/predict")
+@app.post("/predict_test")
+def predict(test_file: UploadFile = File(...)):
+    contents = test_file.file.read()
+    #print(contents)
+    buffer = StringIO(contents.decode('utf-8'))
+    #print(buffer)
+    buffer_str = buffer.getvalue()  # Convert the StringIO object to a string
+    df = json.loads(buffer_str)
+    print(df)
+    # df = pd.DataFrame.from_dict(df['ccpi'], orient='index') # Change name of variable
+    df = pd.DataFrame.from_dict(df, orient='index') # Change name of variable
+    #data_filtered = filter(df)
+    scaler_current = scaling(df)
+    data_preproc = preprocess(df, scaler_current)
+    model_country = load_models()
+    predictions = future_forecasting(dataset = data_preproc,
+                                     model = model_country,
+                                     scaler_model = scaler_current,
+                                     mb = 12,
+                                     mf = 24)
+    print(predictions)
+    result =  [float(value) for value in predictions]
+    print(result)
+    return {"predictions": result}
+
+@app.post("/predict")
+def predict(filteringData: FilteringData = Depends(),
+            test_file: UploadFile = File(...)):
+    print(filteringData.num_months)
+    contents = test_file.file.read()
+    #print(contents)
+    buffer = StringIO(contents.decode('utf-8'))
+    #print(buffer)
+    buffer_str = buffer.getvalue()  # Convert the StringIO object to a string
+    df = json.loads(buffer_str)
+    # df = pd.DataFrame.from_dict(df['ccpi'], orient='index') # Change name of variable
+    df = pd.DataFrame.from_dict(df, orient='index') # Change name of variable
+    #data_filtered = filter(df)
+    scaler_current = scaling(df)
+    data_preproc = preprocess(df, scaler_current)
+    # model_country = load_models()
+    model_country = load_models(
+        model_country=filteringData.country,
+        case=filteringData.inflation_type)
+    predictions = future_forecasting(dataset = data_preproc,
+                                     model = model_country,
+                                     scaler_model = scaler_current,
+                                     mb = 12,
+                                     mf = filteringData.num_months)
+    result =  [float(value) for value in predictions]
+    print(result)
+    return {"predictions": result}
+
+
+# @app.post("/predict")
+# async def predict(filteringData: FilteringData = Depends(),
+#               test_file: UploadFile = File(...)):
+#     print(filteringData)
+#     contents = test_file.file.read()
+#     buffer = StringIO(contents.decode('utf-8'))
+#     buffer_str = buffer.getvalue()  # Convert the StringIO object to a string
+#     df = json.loads(buffer_str)
+#     #df = pd.DataFrame.from_dict(df['ccpi'], orient='index') # Change name of variable
+#     df = pd.DataFrame.from_dict(df, orient='index') # Change name of variable
+#     #data_filtered = filter(df)
+#     scaler_current = scaling(df)
+#     data_preproc = preprocess(df, scaler_current)
+#     model_country = load_models()
+#     predictions = future_forecasting(dataset = data_preproc,
+#                                      model = model_country,
+#                                      scaler_model = scaler_current,
+#                                      mb = 12,
+#                                      mf = 24)
+
+#     return {"predictions": float(predictions[0][0])}
+
+    #print(df)
+    #return {"test": "ok"}
+
 # def predict():
 #     ###Using a dummy model from sklearn###
 
