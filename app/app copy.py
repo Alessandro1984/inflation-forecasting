@@ -6,9 +6,8 @@ import pandas as pd
 import os
 import requests
 import json
+
 import streamlit as st
-
-
 # from sessionstate import SessionState # import SessionState
 # https://stackoverflow.com/questions/63988485/modulenotfounderror-no-module-named-sessionstate
 
@@ -16,10 +15,10 @@ import streamlit as st
 #urlAPItest = "http://127.0.0.1:8000/test"
 urlAPI = "http://127.0.0.1:8000"
 
-st.markdown("""<h1 style='color: blue;'>Use deep learning to predict inflation!</h1>
-<h2>Just change any input parameters and see how the predicted inflation change</h2>""", unsafe_allow_html=True)
+st.markdown("""# use deep learning to predict inflation!
+## use the predict button below""")
 #
-#the relative path to the dcol1, col2 = st.columns([3, 1])ata
+#the relative path to the data
 csv_path = os.path.join('..','raw_data')
 df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
 
@@ -144,7 +143,6 @@ fig.update_layout(
         hoverlabel_namelength=-1,
         width=890,
         height=600,
-        plot_bgcolor='white',
       legend = dict(
             xanchor = "center",
             yanchor = "top",
@@ -155,15 +153,15 @@ fig.update_layout(
       xaxis=dict(
           dtick='M12',
           tickangle=45,
-          tickfont=dict(size=18)
+          tickfont=dict(size=14)
         ),
       yaxis=dict(
-          tickfont=dict(size=18)
+          tickfont=dict(size=14)
         )
     )
 
-#fig.update_layout(
-
+fig.update_layout(
+plot_bgcolor='white')
 
 fig.update_xaxes(
     mirror=True,
