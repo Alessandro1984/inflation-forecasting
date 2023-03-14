@@ -14,7 +14,7 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements_working.txt
 
 #CMD launch API web server
-CMD uvicorn api.fast_api:app --host 0.0.0.0 --port $PORT
+CMD uvicorn inflation_forecasting.api.fast_api:app --host 0.0.0.0 --port $PORT
 
 #Stuff not needed now
 #COPY setup.py /setup.py

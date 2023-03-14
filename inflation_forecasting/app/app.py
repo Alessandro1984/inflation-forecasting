@@ -10,7 +10,8 @@ import requests
 
 #urlAPI = "http://127.0.0.1:8000/predict"
 #urlAPItest = "http://127.0.0.1:8000/test"
-urlAPI = "http://127.0.0.1:8000"
+#urlAPI = "http://127.0.0.1:8000"
+urlAPI = os.environ['SERVICE_URL']
 
 st.markdown("""# use deep learning to predict inflation!
 ## use the predict button below""")
