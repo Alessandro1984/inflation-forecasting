@@ -1,38 +1,44 @@
-# API
-fastapi
-pytz
-uvicorn
-python-multipart
-
-#data processing
-os
-time
-glob
+# packaging
+setuptools>=26
+# twine
+# wheel>=0.29
+# openpyxl
+# python-multipart
+# os
 
 #data analysis
 pandas
 numpy
-plotly.express
+plotly
 #seaborn
 #matplotlib.pyplot
 
-#model
-mean_squared_error
-Model
-Sequential
-layers
-regularizers
-optimizers
-EarlyStopping
-GradientBoostingRegressor
 
-# tests
-httpx
-pytest-asyncio
+# API
+fastapi
+pytz
+uvicorn
+requires.io
+pydantic
 
-#google cloud
-storage
+#data processing
+#os
+# time
+# glob
 
+streamlit
+requests
 
+# data science
+scikit-learn
+
+#tensorflow-macos==2.10.0; sys_platform == 'darwin' and 'ARM' in platform_version # Mac M-chips
+#tensorflow==2.10.0; sys_platform == 'darwin' and 'ARM' not in platform_version # Mac Intel chips
+tensorflow==2.10.0; sys_platform != 'darwin' # Windows & Ubuntu Intel chips
+
+python-multipart
+json5==0.9.11
+jsonpointer==2.3
+jsonschema==4.17.3
 
 #protobuf==3.20.*

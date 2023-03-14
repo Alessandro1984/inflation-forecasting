@@ -1,13 +1,10 @@
 import streamlit as st
-from pathlib import Path
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 import os
 import requests
-import json
 
-import streamlit as st
 # from sessionstate import SessionState # import SessionState
 # https://stackoverflow.com/questions/63988485/modulenotfounderror-no-module-named-sessionstate
 
@@ -19,7 +16,8 @@ st.markdown("""# use deep learning to predict inflation!
 ## use the predict button below""")
 #
 #the relative path to the data
-csv_path = os.path.join('..','raw_data')
+root_path = os.path.dirname(os.path.dirname(__file__))
+csv_path = os.path.join(root_path, 'raw_data')
 df = pd.read_csv(os.path.join(csv_path,'data_final.csv'))
 
 # this slider allows the user to select a number of lines
