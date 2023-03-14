@@ -1,7 +1,4 @@
 from sklearn.preprocessing import MinMaxScaler
-import numpy as np
-import pandas as pd
-import os
 
 def filter(data, country = "USA", case="ccpi"):
     data_country = data[data['country_id'] == country]
