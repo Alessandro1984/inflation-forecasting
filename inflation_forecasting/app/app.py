@@ -56,7 +56,7 @@ with st.sidebar:
     # Add inputs to the sidebar
     st.markdown("<div class='title'>Please select the options:</div>", unsafe_allow_html=True)
     # Select box country
-    country = st.selectbox('Country', country_list)
+    country = st.selectbox('Country', country_list, index=5)
     st.markdown("<div class='widget-box'></div>", unsafe_allow_html=True)
     # Button inflation
     inflation_type = st.radio("Inflation Type", ('Headline Inflation', 'Core Inflation'))
@@ -105,16 +105,16 @@ prediction = response.json()["predictions"]
 #     st.error("Prediction failed.")
 
 with st.container():
-
+#with st.spinner('Loading plot...'):
     # PLOT
     fig = go.Figure()
 
     df_short = df_country.loc[df_country["year"] >= "2015-01-01"]
     df_short_last_row = df_short[inflation_type].iloc[-1]
-    prediction_together = [df_short_last_row] + prediction
+    prediction_together = prediction#[df_short_last_row] + prediction
 
     first_date = df_short['year'].min()
-    last_date = pd.to_datetime(df_short['year'].max()) #+ pd.offsets.MonthBegin(1)
+    last_date = pd.to_datetime(df_short['year'].max()) + pd.offsets.MonthBegin(1)
     #country_name = df_short["country"].unique()[0]
     t = pd.date_range(last_date, periods = num_months, freq='MS')
     forecast_date = t.max()
@@ -135,10 +135,10 @@ with st.container():
                             mode = "lines"))
 
     fig.add_vrect(x0 = last_date,
-                x1 = forecast_date,
-                fillcolor = "grey",
-                opacity = 0.25,
-                line_width = 0)
+                  x1 = forecast_date,
+                  fillcolor = "grey",
+                  opacity = 0.25,
+                  line_width = 0)
 
     fig.update_layout(
             title = f"Out-of-sample forecast until {forecast_date.strftime('%B %Y')}",
