@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import os
 import requests
-import time
 
 st.set_page_config(layout="wide")
 
@@ -148,7 +147,7 @@ with st.container():
             yaxis_title = "Monthly y-o-y percentage change",
             autosize=False,
             hoverlabel_namelength=-1,
-            width=890,
+            #width=890,
             height=700,
         legend = dict(
                 xanchor = "center",
