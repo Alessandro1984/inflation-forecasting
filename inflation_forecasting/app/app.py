@@ -147,8 +147,8 @@ with st.container():
             yaxis_title = "Monthly y-o-y percentage change",
             autosize=False,
             hoverlabel_namelength=-1,
-            #width=890,
-            #height=600,
+            width=890,
+            height=600,
         legend = dict(
                 xanchor = "center",
                 yanchor = "top",
