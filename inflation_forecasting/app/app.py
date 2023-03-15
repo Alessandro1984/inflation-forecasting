@@ -148,7 +148,7 @@ with st.container():
             autosize=False,
             hoverlabel_namelength=-1,
             width=900,
-            height=600,
+            height=650,
         legend = dict(
                 xanchor = "center",
                 yanchor = "top",
@@ -169,21 +169,20 @@ with st.container():
             )
         )
 
-    fig.update_layout(
-    plot_bgcolor='white')
+    fig.update_layout(plot_bgcolor='white')
 
     fig.update_xaxes(
-        mirror=True,
+        mirror=False,
         ticks='outside',
-        showline=True,
+        showline=False,
         linecolor='black',
         gridcolor='lightgrey'
     )
     fig.update_yaxes(
-        mirror=True,
+        mirror=False,
         ticks='outside',
-        showline=True,
+        showline=False,
         linecolor='black',
         gridcolor='lightgrey')
 
-st.plotly_chart(fig, use_container_width=False)
+st.plotly_chart(fig, use_container_width=True)
