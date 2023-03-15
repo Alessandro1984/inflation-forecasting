@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 import os
 import requests
+import time
+
+st.set_page_config(layout="wide")
 
 # from sessionstate import SessionState # import SessionState
 # https://stackoverflow.com/questions/63988485/modulenotfounderror-no-module-named-sessionstate
@@ -11,10 +14,9 @@ import requests
 #urlAPI = "http://127.0.0.1:8000/predict"
 #urlAPItest = "http://127.0.0.1:8000/test"
 #urlAPI = "http://127.0.0.1:8000"
-urlAPI = os.environ['SERVICE_URL']
+urlAPI = "https://y-rvqhh3wpjq-ew.a.run.app"#os.environ['SERVICE_URL']
 
-st.markdown("""# use deep learning to predict inflation!
-## use the predict button below""")
+st.markdown("""# Use deep learning to predict inflation""")
 #
 #the relative path to the data
 root_path = os.path.dirname(os.path.dirname(__file__))
@@ -61,7 +63,7 @@ with st.sidebar:
     inflation_type = st.radio("Inflation Type", ('Headline Inflation', 'Core Inflation'))
     st.markdown("<div class='widget-box'></div>", unsafe_allow_html=True)
     # Slider month
-    num_months = st.slider('Number of Months to Predict', 1, 24)
+    num_months = st.slider('Number of Months to Forecast', 1, 36)
 
 if inflation_type == 'Headline Inflation':
     inflation_type = 'cpi'
@@ -103,78 +105,86 @@ prediction = response.json()["predictions"]
 # else:
 #     st.error("Prediction failed.")
 
-# PLOT
-fig = go.Figure()
+with st.container():
 
-df_short = df_country.loc[df_country["year"] >= "2015-01-01"]
-first_date = df_short['year'].min()
-last_date = pd.to_datetime(df_short['year'].max()) + pd.offsets.MonthBegin(1)
-#country_name = df_short["country"].unique()[0]
-t = pd.date_range(last_date, periods = num_months, freq='MS')
-forecast_date = t.max()
-out_forecast_df = pd.DataFrame([[x, y] for x, y in zip(t, np.array(prediction).reshape(-1, 1))], columns=["year", "Forecast"])
-out_forecast_df['Forecast'] = out_forecast_df['Forecast'].apply(lambda x: np.ravel(x)[0])
+    # PLOT
+    fig = go.Figure()
 
-fig.add_trace(go.Scatter(x = df_short['year'],
-                         y = df_short[inflation_type],
-                         line_color = "blue",
-                         name = "Inflation",
-                         mode = "lines"))
+    df_short = df_country.loc[df_country["year"] >= "2015-01-01"]
+    df_short_last_row = df_short[inflation_type].iloc[-1]
+    prediction_together = [df_short_last_row] + prediction
 
-fig.add_trace(go.Scatter(x = out_forecast_df["year"],
-                         y = out_forecast_df['Forecast'],
-                         name = "Forecasted Core CPI",
-                         line_dash = "dash",
-                         line_color = "black",
-                         mode = "lines"))
+    first_date = df_short['year'].min()
+    last_date = pd.to_datetime(df_short['year'].max()) #+ pd.offsets.MonthBegin(1)
+    #country_name = df_short["country"].unique()[0]
+    t = pd.date_range(last_date, periods = num_months, freq='MS')
+    forecast_date = t.max()
+    out_forecast_df = pd.DataFrame([[x, y] for x, y in zip(t, np.array(prediction_together).reshape(-1, 1))], columns=["year", "Forecast"])
+    out_forecast_df['Forecast'] = out_forecast_df['Forecast'].apply(lambda x: np.ravel(x)[0])
 
-fig.add_vrect(x0 = last_date,
-              x1 = forecast_date,
-              fillcolor = "grey",
-              opacity = 0.25,
-              line_width = 0)
+    fig.add_trace(go.Scatter(x = df_short['year'],
+                            y = df_short[inflation_type],
+                            line_color = "blue",
+                            name = "Inflation",
+                            mode = "lines"))
 
-fig.update_layout(
-        title = f"Out-of-sample forecast until {forecast_date.strftime('%B %Y')}",
-        xaxis_title = "",
-        yaxis_title = "Monthly y-o-y percentage change",
-        autosize=False,
-        hoverlabel_namelength=-1,
-        width=890,
-        height=600,
-      legend = dict(
-            xanchor = "center",
-            yanchor = "top",
-            y = -0.2,
-            x = 0.5,
-            orientation = 'h'
-      ),
-      xaxis=dict(
-          dtick='M12',
-          tickangle=45,
-          tickfont=dict(size=14)
+    fig.add_trace(go.Scatter(x = out_forecast_df["year"],
+                            y = out_forecast_df['Forecast'],
+                            name = "Forecasted inflation",
+                            line_dash = "dash",
+                            line_color = "black",
+                            mode = "lines"))
+
+    fig.add_vrect(x0 = last_date,
+                x1 = forecast_date,
+                fillcolor = "grey",
+                opacity = 0.25,
+                line_width = 0)
+
+    fig.update_layout(
+            title = f"Out-of-sample forecast until {forecast_date.strftime('%B %Y')}",
+            font = dict(size = 20),
+            xaxis_title = "",
+            yaxis_title = "Monthly y-o-y percentage change",
+            autosize=False,
+            hoverlabel_namelength=-1,
+            width=890,
+            height=700,
+        legend = dict(
+                xanchor = "center",
+                yanchor = "top",
+                y = -0.2,
+                x = 0.5,
+                orientation = 'h',
+                font=dict(
+                size=20
+            )
         ),
-      yaxis=dict(
-          tickfont=dict(size=14)
+        xaxis=dict(
+            dtick='M12',
+            tickangle=45,
+            tickfont=dict(size=20)
+            ),
+        yaxis=dict(
+            tickfont=dict(size=20)
+            )
         )
+
+    fig.update_layout(
+    plot_bgcolor='white')
+
+    fig.update_xaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='lightgrey'
     )
+    fig.update_yaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='lightgrey')
 
-fig.update_layout(
-plot_bgcolor='white')
-
-fig.update_xaxes(
-    mirror=True,
-    ticks='outside',
-    showline=True,
-    linecolor='black',
-    gridcolor='lightgrey'
-)
-fig.update_yaxes(
-    mirror=True,
-    ticks='outside',
-    showline=True,
-    linecolor='black',
-    gridcolor='lightgrey')
-
-st.plotly_chart(fig,
-                use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
