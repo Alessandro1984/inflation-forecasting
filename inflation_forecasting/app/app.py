@@ -148,7 +148,7 @@ with st.container():
             autosize=False,
             hoverlabel_namelength=-1,
             #width=890,
-            height=700,
+            #height=600,
         legend = dict(
                 xanchor = "center",
                 yanchor = "top",
