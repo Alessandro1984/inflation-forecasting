@@ -13,8 +13,8 @@ st.set_page_config(layout="wide")
 
 #urlAPI = "http://127.0.0.1:8000/predict"
 #urlAPItest = "http://127.0.0.1:8000/test"
-#urlAPI = "http://127.0.0.1:8000"
-urlAPI = "https://y-rvqhh3wpjq-ew.a.run.app"#os.environ['SERVICE_URL']
+urlAPI = "http://127.0.0.1:8000"
+#urlAPI = "https://y-rvqhh3wpjq-ew.a.run.app"#os.environ['SERVICE_URL']
 
 st.markdown("""# Use deep learning to predict inflation""")
 #
