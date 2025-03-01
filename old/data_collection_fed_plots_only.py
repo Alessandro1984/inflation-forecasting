@@ -36,7 +36,7 @@ from plotly.subplots import make_subplots
 
 # In[20]:
 
-df_merged = pd.read_csv('raw_data/data.csv')
+df_merged = pd.read_csv('inflation_forecasting/raw_data/data_us.csv')
 
 config = {'displayModeBar': False}
 
