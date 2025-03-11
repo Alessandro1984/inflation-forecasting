@@ -14,6 +14,11 @@ The project was developed in only 8 days of work. During the creation of the pro
 - Building of the *Docker* image and pushing of the *Docker* image to Google Cloud Platform
 - The app is published online. The app allows the user to select the country, the type of inflation, and the time horizon over which to produce the forecast
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ed51d206-f7ef-4758-be35-9369f1694ec0" width="45%" alt="Image 1">
+  <img src="https://github.com/user-attachments/assets/a977a5f1-de62-469d-a8a0-5e82124bcfda" width="45%" alt="Image 2">
+</p>
+
 **DISCLAIMER:** Obviously for us it was a training exercise. No pretense of being scientific here. We are fully aware that our prediction must be taken with the grain of salt. Still, we learned a lot and that was the most important thing for us!
 
-
+**UPDATE**: The *Docker* image is currently inactive; however, both the dashboard and API remain fully functional in the local environment.
